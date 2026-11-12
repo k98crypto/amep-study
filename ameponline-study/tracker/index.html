@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light">
+    <title>英语学习进度</title>
+    <link rel="stylesheet" href="/style.css">
+    <script src="/app.js" defer></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="英语学习进度">
+        <span class="brand-mark" aria-hidden="true">EN</span>
+        <span>英语学习</span>
+      </a>
+      <nav class="top-actions" aria-label="主要操作">
+        <a class="button button-quiet" href="https://LWA.spiritwave.dpdns.org/" target="_blank" rel="noreferrer">打开 AMEPOnline</a>
+        <a class="button button-quiet" href="/api/export" download="amep-study-progress.json">导出记录</a>
+        <span id="user-name" class="user-name"></span>
+        <button id="logout-button" class="button button-quiet" type="button">退出</button>
+      </nav>
+    </header>
+
+    <main>
+      <section class="page-heading">
+        <div>
+          <p class="eyebrow">学习记录</p>
+          <h1>我的进度</h1>
+        </div>
+        <button id="import-toggle" class="button button-outline" type="button" aria-expanded="false" aria-controls="import-panel">导入原站进度</button>
+      </section>
+
+      <section class="summary" aria-label="学习统计">
+        <div class="metric"><span>课程与活动</span><strong id="metric-total">0</strong></div>
+        <div class="metric"><span>学习中</span><strong id="metric-active">0</strong></div>
+        <div class="metric"><span>已完成</span><strong id="metric-done">0</strong></div>
+        <div class="metric"><span>整体进度</span><strong id="metric-progress">0%</strong></div>
+      </section>
+
+      <section id="import-panel" class="import-panel" hidden>
+        <div class="import-head">
+          <div>
+            <h2>从浏览器导入</h2>
+            <p>将书签拖到浏览器书签栏。在 AMEPOnline 进度页面点击它生成 JSON，再选择文件导入。</p>
+          </div>
+          <button id="import-close" class="icon-button" type="button" aria-label="关闭导入面板" title="关闭">×</button>
+        </div>
+        <div class="import-tools">
+          <a id="bookmarklet" class="button button-outline" href="#">AMEP 进度导出书签</a>
+          <label class="file-picker button button-outline" for="import-file">选择 JSON 文件</label>
+          <input id="import-file" type="file" accept="application/json,.json" hidden>
+          <span id="file-name" class="file-name">未选择文件</span>
+        </div>
+        <p class="import-note">只提取页面可见的课程和完成状态；不会读取或导入 Cookie、密码、令牌。</p>
+        <div id="import-preview" class="import-preview" hidden>
+          <span id="preview-count"></span>
+          <button id="import-confirm" class="button button-primary" type="button">确认导入</button>
+        </div>
+      </section>
+
+      <div class="workspace">
+        <section class="records-section" aria-labelledby="records-title">
+          <div class="section-heading">
+            <h2 id="records-title">课程记录</h2>
+            <label class="filter-control">
+              <span class="sr-only">筛选进度</span>
+              <select id="status-filter" aria-label="筛选进度">
+                <option value="all">全部状态</option>
+                <option value="学习中">学习中</option>
+                <option value="未开始">未开始</option>
+                <option value="已完成">已完成</option>
+              </select>
+            </label>
+          </div>
+          <div id="record-list" class="record-list" aria-live="polite"></div>
+          <p id="empty-state" class="empty-state" hidden>还没有学习记录。可以从空白开始，或导入原站进度。</p>
+        </section>
+
+        <aside class="entry-section" aria-labelledby="entry-title">
+          <h2 id="entry-title">添加学习记录</h2>
+          <form id="record-form">
+            <label>课程名称<input name="course" maxlength="180" required autocomplete="off" placeholder="例如：Everyday English"></label>
+            <label>单元或活动<input name="activity" maxlength="180" required autocomplete="off" placeholder="例如：Lesson 1"></label>
+            <div class="form-row">
+              <label>状态<select name="status"><option>未开始</option><option>学习中</option><option>已完成</option></select></label>
+              <label>进度<input name="progress" type="number" min="0" max="100" value="0" inputmode="numeric"><span class="input-suffix">%</span></label>
+            </div>
+            <label>学习日期<input name="lastStudied" type="date"></label>
+            <label>备注<textarea name="notes" rows="3" maxlength="1000" placeholder="可留空"></textarea></label>
+            <button class="button button-primary submit-button" type="submit">保存记录</button>
+          </form>
+          <p id="notice" class="notice" role="status" aria-live="polite"></p>
+        </aside>
+      </div>
+    </main>
+  </body>
+</html>

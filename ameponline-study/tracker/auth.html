@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light">
+    <title>账号登录</title>
+    <link rel="stylesheet" href="/auth.css">
+    <script src="/auth.js" defer></script>
+  </head>
+  <body>
+    <main class="auth-shell">
+      <a class="brand" href="/login"><span class="brand-mark">EN</span><span>英语学习</span></a>
+      <section class="auth-content">
+        <p class="eyebrow">AMEPOnline 学习空间</p>
+        <h1 id="page-title">登录</h1>
+        <p id="page-subtitle" class="subtitle"></p>
+
+        <form id="auth-form" novalidate>
+          <div id="username-field" class="field">
+            <label for="username">账号</label>
+            <input id="username" name="username" minlength="3" maxlength="32" autocomplete="username" required>
+          </div>
+          <div id="password-field" class="field">
+            <label for="password">密码</label>
+            <input id="password" name="password" type="password" minlength="10" autocomplete="current-password" required>
+          </div>
+          <div id="confirm-field" class="field" hidden>
+            <label for="confirm-password">确认密码</label>
+            <input id="confirm-password" name="confirmPassword" type="password" minlength="10" autocomplete="new-password">
+          </div>
+          <div id="recovery-field" class="field" hidden>
+            <label for="recovery-code">恢复码</label>
+            <input id="recovery-code" name="recoveryCode" autocomplete="off" spellcheck="false">
+          </div>
+          <button id="submit-button" class="submit-button" type="submit">登录</button>
+        </form>
+
+        <p id="notice" class="notice" role="status" aria-live="polite"></p>
+        <section id="recovery-panel" class="recovery-panel" hidden>
+          <h2>保存恢复码</h2>
+          <p>请现在保存。忘记密码时需要使用；关闭后不会再次显示。</p>
+          <code id="recovery-display"></code>
+          <button id="copy-recovery" class="secondary-button" type="button">复制恢复码</button>
+          <button id="continue-button" class="submit-button" type="button">继续</button>
+        </section>
+        <nav id="auth-links" class="auth-links"></nav>
+      </section>
+    </main>
+  </body>
+</html>

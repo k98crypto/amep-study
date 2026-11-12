@@ -1,0 +1,42 @@
+services:
+  amep-proxy:
+    image: ubuntu/squid:latest
+    container_name: amep-lan-proxy
+    restart: unless-stopped
+    ports:
+      - "192.168.10.10:3128:3128"
+    volumes:
+      - ./squid.conf:/etc/squid/squid.conf:ro
+    read_only: true
+    tmpfs:
+      - /var/run
+      - /var/cache/squid
+      - /var/log/squid
+    cap_drop:
+      - ALL
+    cap_add:
+      - SETUID
+      - SETGID
+    security_opt:
+      - no-new-privileges:true
+
+  proxy-settings:
+    image: nginx:alpine
+    container_name: amep-proxy-settings
+    restart: unless-stopped
+    ports:
+      - "192.168.10.10:8090:8080"
+    volumes:
+      - ./proxy-settings:/usr/share/nginx/html:ro
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    read_only: true
+    tmpfs:
+      - /var/cache/nginx
+      - /var/run
+    cap_drop:
+      - ALL
+    cap_add:
+      - SETUID
+      - SETGID
+    security_opt:
+      - no-new-privileges:true

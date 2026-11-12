@@ -1,0 +1,66 @@
+services:
+  gateway:
+    image: caddy:2-alpine
+    container_name: amep-study-gateway
+    restart: unless-stopped
+    depends_on:
+      - upstream
+      - tracker
+    network_mode: host
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE
+    security_opt:
+      - no-new-privileges:true
+
+  upstream:
+    image: nginx:alpine
+    container_name: amep-study-upstream
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:18080:8080"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    read_only: true
+    tmpfs:
+      - /var/cache/nginx
+      - /var/run
+    cap_drop:
+      - ALL
+    cap_add:
+      - CHOWN
+      - SETUID
+      - SETGID
+    security_opt:
+      - no-new-privileges:true
+
+  tracker:
+    image: python:3.13-alpine
+    container_name: amep-study-tracker
+    restart: unless-stopped
+    command: ["python", "/app/server.py"]
+    ports:
+      - "127.0.0.1:18081:8080"
+    volumes:
+      - ./tracker:/app:ro
+      - tracker-data:/data
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+
+volumes:
+  caddy-data:
+  caddy-config:
+  tracker-data:
